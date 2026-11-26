@@ -1,0 +1,4 @@
+id,name,type,capacity
+R1,Classroom 1,classroom,40
+R2,Classroom 2,classroom,40
+LAB,Chemistry Lab,chem_lab,40

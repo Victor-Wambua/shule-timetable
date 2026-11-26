@@ -13,6 +13,7 @@ from collections import defaultdict
 
 from shule_timetable.loader import load_school
 from shule_timetable.model import Event, School, Slot, Timetable
+from shule_timetable.scoring import score
 from shule_timetable.validator import validate
 
 
@@ -108,6 +109,7 @@ def main() -> None:
         )
         < r.lessons
     }
+    print(f"soft-rule penalty of what it built: {score(school, tt).total}")
     print(f"classes with at least one subject short: {len(classes_short)} of {len(school.classes)}")
 
 

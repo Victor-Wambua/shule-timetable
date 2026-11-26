@@ -167,3 +167,19 @@ def test_committed_examples_match_the_generator(kind: str) -> None:
 def test_unknown_sample_school() -> None:
     with pytest.raises(ValueError, match="unknown sample school"):
         generate("university")
+
+
+def test_committed_infeasible_example_is_explained() -> None:
+    from shule_timetable.explain import explain_infeasible
+
+    school = load_school(ROOT / "examples" / "infeasible-lab")
+    assert run_prechecks(school) == []  # every single-resource check passes
+    exp = explain_infeasible(school, time_limit=10, workers=1)
+    assert exp.status == "infeasible" and exp.minimal
+    assert {c.group for c in exp.core} == {
+        "req:F1:CHE",
+        "req:F2:CHE",
+        "teacher-avail:T01",
+        "teacher-avail:T02",
+        "rooms:chem_lab",
+    }

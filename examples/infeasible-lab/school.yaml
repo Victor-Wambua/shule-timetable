@@ -1,0 +1,15 @@
+# A small school built to be impossible in a way no single check can see.
+# Each teacher alone is fine, the lab alone is fine; the three together are not.
+name: Infeasible demo school (synthetic)
+synthetic: true
+days: [Mon, Tue, Wed]
+periods:
+  - {label: P1, start: "08:00", end: "08:40"}
+  - {label: P2, start: "08:40", end: "09:20"}
+  - {label: P3, start: "09:40", end: "10:20"}
+  - {label: P4, start: "10:20", end: "11:00"}
+  - {label: P5, start: "11:20", end: "12:00"}
+  - {label: P6, start: "12:00", end: "12:40"}
+breaks:
+  - {after: P2, name: Tea}
+  - {after: P4, name: Break}
