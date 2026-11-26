@@ -1,0 +1,38 @@
+# Shule Timetable input. SYNTHETIC sample: the school, people and lesson counts are invented.
+name: Mwangaza Hills Secondary School (synthetic sample)
+synthetic: true
+term: {start: 2026-01-05, weeks: 13}
+
+days: [Mon, Tue, Wed, Thu, Fri]
+periods:
+  - {label: P1, start: "08:00", end: "08:40"}
+  - {label: P2, start: "08:40", end: "09:20"}
+  - {label: P3, start: "09:40", end: "10:20"}
+  - {label: P4, start: "10:20", end: "11:00"}
+  - {label: P5, start: "11:20", end: "12:00"}
+  - {label: P6, start: "12:00", end: "12:40"}
+  - {label: P7, start: "13:30", end: "14:10"}
+  - {label: P8, start: "14:10", end: "14:50"}
+breaks:                       # a break sits after the named period; doubles cannot span it
+  - {after: P2, name: Tea}
+  - {after: P4, name: Break}
+  - {after: P6, name: Lunch, long: true}   # long = ends a "stretch" of back-to-back teaching
+short_days: {Fri: 6}          # Friday has lessons in P1-P6 only
+
+limits:
+  max_per_subject_per_day: 2
+  max_consecutive_lessons: 3   # more than this back to back counts against the timetable
+  morning_until: P4
+
+light_slots: ["Fri:P5-P6"]    # keep Friday late morning light (soft)
+
+weights:                       # penalty per occurrence; 0 switches a soft rule off
+  spread_subjects: 4
+  teacher_consecutive: 6
+  teacher_gaps: 2
+  class_gaps: 8
+  heavy_morning: 3
+  balance_daily_load: 2
+  avoid_edges: 3
+  teacher_days_compact: 1
+  light_slots: 2

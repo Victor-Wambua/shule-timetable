@@ -1,0 +1,10 @@
+id,name,room_type,room_use,doubles,heavy,avoid_edges
+ENG,English,home,all,0,yes,no
+KIS,Kiswahili,home,all,0,no,no
+MAT,Mathematics,home,all,0,yes,no
+SCI,Science and Technology,science_room,doubles,1,no,no
+SST,Social Studies,home,all,0,no,no
+CRE,Christian Religious Education,home,all,0,no,no
+ART,Creative Arts,home,all,1,no,no
+AGR,Agriculture and Nutrition,home,all,0,no,no
+PE,Physical Education,field,all,0,no,yes

@@ -1,0 +1,14 @@
+id,name,room_type,room_use,doubles,heavy,avoid_edges
+ENG,English,home,all,0,yes,no
+KIS,Kiswahili,home,all,0,no,no
+MAT,Mathematics,home,all,0,yes,no
+BIO,Biology,bio_lab,doubles,1,no,no
+CHE,Chemistry,chem_lab,doubles,1,yes,no
+PHY,Physics,phy_lab,doubles,1,yes,no
+HIS,History and Government,home,all,0,no,no
+GEO,Geography,home,all,0,no,no
+CRE,Christian Religious Education,home,all,0,no,no
+BST,Business Studies,home,all,0,no,no
+AGR,Agriculture,home,all,0,no,no
+CMP,Computer Studies,computer_lab,all,1,no,no
+PE,Physical Education,field,all,0,no,yes

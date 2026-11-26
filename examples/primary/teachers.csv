@@ -1,0 +1,9 @@
+id,name,subjects,max_per_week,max_per_day,unavailable
+T01,Anyango Ndegwa,ENG;KIS;MAT;SCI;SST;CRE,28,6,
+T02,Ndungu Nyongesa,ENG;KIS;MAT;SCI;SST;CRE,28,6,
+T03,Naserian Wambui,ENG;KIS;MAT;SCI;SST;CRE,28,6,
+T04,Mwangi Muthoni,ENG;KIS;MAT;SCI;SST;CRE,28,6,
+T05,Naserian Mbugua,ENG;KIS;MAT;SCI;SST;CRE,28,6,
+T06,Atieno Wekesa,ENG;KIS;MAT;SCI;SST;CRE,28,6,
+T07,Anyango Musyoka,PE,28,6,Thu:*
+T08,Naliaka Kamau,ART;AGR,28,6,Mon:P2-P5

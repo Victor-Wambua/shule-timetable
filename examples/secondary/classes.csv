@@ -1,0 +1,17 @@
+id,name,size,home_room
+1N,Form 1N,40,R01
+1E,Form 1E,39,R02
+1W,Form 1W,41,R03
+1S,Form 1S,43,R04
+2N,Form 2N,38,R05
+2E,Form 2E,38,R06
+2W,Form 2W,44,R07
+2S,Form 2S,42,R08
+3N,Form 3N,38,R09
+3E,Form 3E,40,R10
+3W,Form 3W,42,R11
+3S,Form 3S,38,R12
+4N,Form 4N,42,R13
+4E,Form 4E,39,R14
+4W,Form 4W,38,R15
+4S,Form 4S,38,R16

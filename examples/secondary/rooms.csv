@@ -1,0 +1,24 @@
+id,name,type,capacity
+R01,Classroom 01,classroom,45
+R02,Classroom 02,classroom,45
+R03,Classroom 03,classroom,45
+R04,Classroom 04,classroom,45
+R05,Classroom 05,classroom,45
+R06,Classroom 06,classroom,45
+R07,Classroom 07,classroom,45
+R08,Classroom 08,classroom,45
+R09,Classroom 09,classroom,45
+R10,Classroom 10,classroom,45
+R11,Classroom 11,classroom,45
+R12,Classroom 12,classroom,45
+R13,Classroom 13,classroom,45
+R14,Classroom 14,classroom,45
+R15,Classroom 15,classroom,45
+R16,Classroom 16,classroom,45
+CH1,Chemistry Lab 1,chem_lab,45
+CH2,Chemistry Lab 2,chem_lab,45
+BL1,Biology Lab,bio_lab,45
+PL1,Physics Lab,phy_lab,45
+CL1,Computer Lab,computer_lab,45
+FLD1,Main Field,field,200
+FLD2,Upper Field,field,200

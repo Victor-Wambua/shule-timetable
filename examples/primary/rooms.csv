@@ -1,0 +1,9 @@
+id,name,type,capacity
+R01,Classroom 01,classroom,45
+R02,Classroom 02,classroom,45
+R03,Classroom 03,classroom,45
+R04,Classroom 04,classroom,45
+R05,Classroom 05,classroom,45
+R06,Classroom 06,classroom,45
+SCI1,Science Room,science_room,45
+FLD1,School Field,field,200
