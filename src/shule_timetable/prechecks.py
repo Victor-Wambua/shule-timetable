@@ -82,7 +82,7 @@ def _teacher_load(school: School) -> list[Issue]:
                     "teachers.csv",
                 )
             )
-        per_day = defaultdict(int)
+        per_day: dict[int, int] = defaultdict(int)
         for d, _p in avail:
             per_day[d] += 1
         daily_cap = sum(min(t.max_per_day, n) for n in per_day.values())

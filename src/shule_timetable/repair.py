@@ -271,11 +271,11 @@ def repair(
     soft_expr = sum(w * v for w, v in builder.soft_terms) if builder.soft_terms else 0
 
     # stage 1: fewest moved lessons
-    model.Minimize(moved_expr)
+    model.minimize(moved_expr)
     solver = cp_model.CpSolver()
     half = max(1.0, settings.time_limit / 2)
     configure(solver, replace(settings, time_limit=half))
-    status = solver.Solve(model)
+    status = solver.solve(model)
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         return RepairResult(
             STATUS_NAMES.get(status, str(status)),
@@ -283,16 +283,16 @@ def repair(
             None,
             wall_time=time.perf_counter() - started,
         )
-    best_moved = round(solver.ObjectiveValue())
+    best_moved = round(solver.objective_value)
     proven = status == cp_model.OPTIMAL
 
     # stage 2: keep that minimum, then tidy up the soft score
-    model.Add(moved_expr <= best_moved)
-    model.Minimize(soft_expr + ROOM_CHANGE_COST * sum(room_terms) if room_terms else soft_expr)
+    model.add(moved_expr <= best_moved)
+    model.minimize(soft_expr + ROOM_CHANGE_COST * sum(room_terms) if room_terms else soft_expr)
     builder.add_hint(builder.extract(solver))
     solver2 = cp_model.CpSolver()
     configure(solver2, replace(settings, time_limit=max(1.0, settings.time_limit - half)))
-    status2 = solver2.Solve(model)
+    status2 = solver2.solve(model)
     use = solver2 if status2 in (cp_model.OPTIMAL, cp_model.FEASIBLE) else solver
     timetable = builder.extract(use)
 

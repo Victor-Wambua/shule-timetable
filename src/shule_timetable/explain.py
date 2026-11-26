@@ -155,18 +155,18 @@ def explain_infeasible(
     builder = ModelBuilder(school, explain=True, soft=False)
     model = builder.model
     lits = list(builder.groups.values())
-    names = {lit.Index(): name for name, lit in builder.groups.items()}
-    model.AddAssumptions(lits)
+    names = {lit.index: name for name, lit in builder.groups.items()}
+    model.add_assumptions(lits)
     solver = cp_model.CpSolver()
     configure(solver, SolveSettings(time_limit=time_limit, seed=seed, workers=workers))
-    status = solver.Solve(model)
+    status = solver.solve(model)
     if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         return Explanation("feasible", pre)
     if status != cp_model.INFEASIBLE:
         return Explanation(
             "unknown", pre, note=f"Solver stopped with status {STATUS_NAMES.get(status, status)}."
         )
-    core = [names[i] for i in solver.SufficientAssumptionsForInfeasibility()]
+    core = [names[i] for i in solver.sufficient_assumptions_for_infeasibility()]
     core, minimal = _shrink(builder, core, shrink_time, seed)
     items = []
     for g in core:
@@ -184,15 +184,15 @@ def _shrink(
     minimal = True
     for g in list(core):
         trial = [c for c in current if c != g]
-        model.ClearAssumptions()
-        model.AddAssumptions([builder.groups[c] for c in trial])
+        model.clear_assumptions()
+        model.add_assumptions([builder.groups[c] for c in trial])
         solver = cp_model.CpSolver()
         configure(solver, SolveSettings(time_limit=per_call, seed=seed, workers=1))
-        status = solver.Solve(model)
+        status = solver.solve(model)
         if status == cp_model.INFEASIBLE:
             # the smaller set is already contradictory; use the solver's own (maybe smaller) core
-            idx = {builder.groups[c].Index(): c for c in trial}
-            current = [idx[i] for i in solver.SufficientAssumptionsForInfeasibility()]
+            idx = {builder.groups[c].index: c for c in trial}
+            current = [idx[i] for i in solver.sufficient_assumptions_for_infeasibility()]
         elif status == cp_model.UNKNOWN:
             minimal = False
     return current, minimal

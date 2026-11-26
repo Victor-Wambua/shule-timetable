@@ -133,18 +133,18 @@ def validate(school: School, timetable: Timetable) -> ValidationReport:
             )
     for e in sound:
         res["lesson-counts"].checked += 1
-        r = required.get((e.class_id, e.subject_id))
-        if r is None:
+        want = required.get((e.class_id, e.subject_id))
+        if want is None:
             bad(
                 "lesson-counts",
                 f"Class {e.class_id} has {school.subjects[e.subject_id].name} scheduled "
                 "but does not need it",
             )
-        elif e.teacher_id != r.teacher_id:
+        elif e.teacher_id != want.teacher_id:
             bad(
                 "lesson-counts",
                 f"Class {e.class_id} {school.subjects[e.subject_id].name} is taught by "
-                f"{e.teacher_id} but should be {r.teacher_id}",
+                f"{e.teacher_id} but should be {want.teacher_id}",
             )
 
     # -- doubles do not straddle breaks ----------------------------------------
@@ -194,10 +194,10 @@ def validate(school: School, timetable: Timetable) -> ValidationReport:
     # -- room suitability ----------------------------------------------------------
     for e in sound:
         res["room-suitability"].checked += 1
-        r = required.get((e.class_id, e.subject_id))
-        if r is None:
+        needed = required.get((e.class_id, e.subject_id))
+        if needed is None:
             continue
-        subject = school.subjects[r.subject_id]
+        subject = school.subjects[needed.subject_id]
         klass = school.classes[e.class_id]
         room = school.rooms[e.room_id]
         in_pool = subject.room_type != HOME and (subject.room_use == "all" or e.length == 2)

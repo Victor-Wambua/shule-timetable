@@ -14,6 +14,7 @@ import argparse
 import math
 import random
 from pathlib import Path
+from typing import Any
 
 STREAMS = ["N", "E", "W", "S", "C", "H"]
 FIRST = [
@@ -271,7 +272,7 @@ def generate_secondary(streams: int = 4, seed: int = 7) -> dict[str, str]:
                 needs.append((cid, sid, n))
 
     subject_row = {s[0]: s for s in SECONDARY_SUBJECTS}
-    teachers: list[dict[str, object]] = []
+    teachers: list[dict[str, Any]] = []
     reqs: list[tuple[str, str, str, int, int]] = []
     for pool in POOLS:
         items = sorted((n for n in needs if n[1] in pool), key=lambda n: (-n[2], n[0], n[1]))

@@ -97,13 +97,13 @@ class ModelBuilder:
         if not self.explain:
             return None
         if name not in self.groups:
-            self.groups[name] = self.model.NewBoolVar(f"g[{name}]")
+            self.groups[name] = self.model.new_bool_var(f"g[{name}]")
         return self.groups[name]
 
     def _add(self, constraint: Any, group: str) -> None:
         lit = self._group(group)
         if lit is not None:
-            constraint.OnlyEnforceIf(lit)
+            constraint.only_enforce_if(lit)
 
     def _x_at(self, ri: int, slot: Slot) -> cp_model.IntVar | None:
         return self.x.get((ri, slot))
@@ -117,9 +117,9 @@ class ModelBuilder:
             singles = r.lessons - 2 * r.doubles
             for s in self.slots:
                 if singles > 0:
-                    self.b1[(ri, s)] = m.NewBoolVar(f"b1[{ri},{s}]")
+                    self.b1[(ri, s)] = m.new_bool_var(f"b1[{ri},{s}]")
                 if r.doubles > 0 and s in double_starts:
-                    self.b2[(ri, s)] = m.NewBoolVar(f"b2[{ri},{s}]")
+                    self.b2[(ri, s)] = m.new_bool_var(f"b2[{ri},{s}]")
             for s in self.slots:
                 parts = []
                 if (ri, s) in self.b1:
@@ -129,11 +129,11 @@ class ModelBuilder:
                 prev = (s[0], s[1] - 1)
                 if (ri, prev) in self.b2:
                     parts.append(self.b2[(ri, prev)])
-                xv = m.NewBoolVar(f"x[{ri},{s}]")
+                xv = m.new_bool_var(f"x[{ri},{s}]")
                 if parts:
-                    m.Add(xv == sum(parts))
+                    m.add(xv == sum(parts))
                 else:
-                    m.Add(xv == 0)
+                    m.add(xv == 0)
                 self.x[(ri, s)] = xv
         # specialist-room assignment variables
         for ri, r in enumerate(self.reqs):
@@ -141,10 +141,10 @@ class ModelBuilder:
             for s in self.slots:
                 if (ri, s) in self.b1 and self.school.uses_pool(r, is_double=False):
                     for room in pool:
-                        self.e1[(ri, s, room.id)] = m.NewBoolVar(f"e1[{ri},{s},{room.id}]")
+                        self.e1[(ri, s, room.id)] = m.new_bool_var(f"e1[{ri},{s},{room.id}]")
                 if (ri, s) in self.b2 and self.school.uses_pool(r, is_double=True):
                     for room in pool:
-                        self.e2[(ri, s, room.id)] = m.NewBoolVar(f"e2[{ri},{s},{room.id}]")
+                        self.e2[(ri, s, room.id)] = m.new_bool_var(f"e2[{ri},{s},{room.id}]")
 
     # ------------------------------------------------------------------ hard rules
     def _build_hard(self) -> None:
@@ -163,40 +163,40 @@ class ModelBuilder:
             gname = f"req:{r.class_id}:{r.subject_id}"
             singles = r.lessons - 2 * r.doubles
             self._add(
-                m.Add(sum(self.b1[(ri, s)] for s in self.slots if (ri, s) in self.b1) == singles),
+                m.add(sum(self.b1[(ri, s)] for s in self.slots if (ri, s) in self.b1) == singles),
                 gname,
             )
             self._add(
-                m.Add(sum(self.b2[(ri, s)] for s in self.slots if (ri, s) in self.b2) == r.doubles),
+                m.add(sum(self.b2[(ri, s)] for s in self.slots if (ri, s) in self.b2) == r.doubles),
                 gname,
             )
             limit = school.subject_max_per_day(r.subject_id)
             for d in range(len(cal.days)):
                 terms = [self.x[(ri, (d, p))] for p in cal.valid_periods(d)]
                 if len(terms) > limit:
-                    self._add(m.Add(sum(terms) <= limit), f"perday:{r.class_id}:{r.subject_id}")
+                    self._add(m.add(sum(terms) <= limit), f"perday:{r.class_id}:{r.subject_id}")
 
         # a class is in one place at a time
         for cid, ris in by_class.items():
             for s in self.slots:
-                self._add(m.Add(sum(self.x[(ri, s)] for ri in ris) <= 1), f"class:{cid}")
+                self._add(m.add(sum(self.x[(ri, s)] for ri in ris) <= 1), f"class:{cid}")
 
         # teachers
         for tid, ris in by_teacher.items():
             t = school.teachers[tid]
             for s in self.slots:
-                self._add(m.Add(sum(self.x[(ri, s)] for ri in ris) <= 1), f"teacher-clash:{tid}")
+                self._add(m.add(sum(self.x[(ri, s)] for ri in ris) <= 1), f"teacher-clash:{tid}")
                 if s in t.unavailable:
                     for ri in ris:
-                        self._add(m.Add(self.x[(ri, s)] == 0), f"teacher-avail:{tid}")
+                        self._add(m.add(self.x[(ri, s)] == 0), f"teacher-avail:{tid}")
             self._add(
-                m.Add(sum(self.x[(ri, s)] for ri in ris for s in self.slots) <= t.max_per_week),
+                m.add(sum(self.x[(ri, s)] for ri in ris for s in self.slots) <= t.max_per_week),
                 f"teacher-load:{tid}",
             )
             for d in range(len(cal.days)):
                 terms = [self.x[(ri, (d, p))] for ri in ris for p in cal.valid_periods(d)]
                 if len(terms) > t.max_per_day:
-                    self._add(m.Add(sum(terms) <= t.max_per_day), f"teacher-load:{tid}")
+                    self._add(m.add(sum(terms) <= t.max_per_day), f"teacher-load:{tid}")
 
         # rooms: every specialist event gets exactly one eligible room; no room is shared
         e1_by: dict[tuple[int, Slot], list[cp_model.IntVar]] = defaultdict(list)
@@ -212,14 +212,14 @@ class ModelBuilder:
             use[(k, nxt)].append(v)
         for (ri, s), vs in e1_by.items():
             gname = f"rooms:{school.subjects[self.reqs[ri].subject_id].room_type}"
-            self._add(m.Add(sum(vs) == self.b1[(ri, s)]), gname)
+            self._add(m.add(sum(vs) == self.b1[(ri, s)]), gname)
         for (ri, s), vs in e2_by.items():
             gname = f"rooms:{school.subjects[self.reqs[ri].subject_id].room_type}"
-            self._add(m.Add(sum(vs) == self.b2[(ri, s)]), gname)
+            self._add(m.add(sum(vs) == self.b2[(ri, s)]), gname)
         room_type = {k: room.type for k, room in school.rooms.items()}
         for (k, _s), vs in use.items():
             if len(vs) > 1:
-                self._add(m.Add(sum(vs) <= 1), f"rooms:{room_type[k]}")
+                self._add(m.add(sum(vs) <= 1), f"rooms:{room_type[k]}")
 
     # ------------------------------------------------------------------ soft rules
     def _build_soft(self) -> None:
@@ -239,8 +239,8 @@ class ModelBuilder:
         def busy_vars(ris: list[int], name: str) -> dict[Slot, cp_model.IntVar]:
             out: dict[Slot, cp_model.IntVar] = {}
             for s in self.slots:
-                v = m.NewBoolVar(f"{name}@{s}")
-                m.Add(v == sum(self.x[(ri, s)] for ri in ris))
+                v = m.new_bool_var(f"{name}@{s}")
+                m.add(v == sum(self.x[(ri, s)] for ri in ris))
                 out[s] = v
             return out
 
@@ -259,11 +259,11 @@ class ModelBuilder:
                 target = min(r.blocks, len(active_days))
                 used = []
                 for d in active_days:
-                    u = m.NewBoolVar(f"u[{ri},{d}]")
-                    m.AddMaxEquality(u, [self.x[(ri, (d, p))] for p in cal.valid_periods(d)])
+                    u = m.new_bool_var(f"u[{ri},{d}]")
+                    m.add_max_equality(u, [self.x[(ri, (d, p))] for p in cal.valid_periods(d)])
                     used.append(u)
-                missing = m.NewIntVar(0, target, f"missing[{ri}]")
-                m.Add(missing == target - sum(used))
+                missing = m.new_int_var(0, target, f"missing[{ri}]")
+                m.add(missing == target - sum(used))
                 self.soft_terms.append((w.spread_subjects, missing))
 
         # teachers: long back-to-back runs, gaps, working days
@@ -275,9 +275,9 @@ class ModelBuilder:
                     for stretch in cal.stretches(d):
                         for i in range(len(stretch) - k):
                             window = [busy[(d, p)] for p in stretch[i : i + k + 1]]
-                            v = m.NewBoolVar(f"run[{tid},{d},{i}]")
-                            m.AddBoolAnd(window).OnlyEnforceIf(v)
-                            m.AddBoolOr([b.Not() for b in window] + [v])
+                            v = m.new_bool_var(f"run[{tid},{d},{i}]")
+                            m.add_bool_and(window).only_enforce_if(v)
+                            m.add_bool_or([b.negated() for b in window] + [v])
                             self.soft_terms.append((w.teacher_consecutive, v))
                 if w.teacher_gaps:
                     for g in self._gap_vars(
@@ -285,13 +285,13 @@ class ModelBuilder:
                     ):
                         self.soft_terms.append((w.teacher_gaps, g))
                 if w.teacher_days_compact:
-                    worked = m.NewBoolVar(f"worked[{tid},{d}]")
-                    m.AddMaxEquality(worked, [busy[(d, p)] for p in cal.valid_periods(d)])
+                    worked = m.new_bool_var(f"worked[{tid},{d}]")
+                    m.add_max_equality(worked, [busy[(d, p)] for p in cal.valid_periods(d)])
                     worked_days.setdefault(tid, []).append(worked)
             if w.teacher_days_compact:
                 floor = min_days_needed(school, tid)
-                excess = m.NewIntVar(0, len(active_days), f"excess_days[{tid}]")
-                m.AddMaxEquality(excess, [sum(worked_days[tid]) - floor, 0])
+                excess = m.new_int_var(0, len(active_days), f"excess_days[{tid}]")
+                m.add_max_equality(excess, [sum(worked_days[tid]) - floor, 0])
                 self.soft_terms.append((w.teacher_days_compact, excess))
 
         # classes: gaps, balanced days
@@ -307,8 +307,8 @@ class ModelBuilder:
                 target = -(-total // len(active_days)) if active_days else 0
                 for d in active_days:
                     load = sum(busy[(d, p)] for p in cal.valid_periods(d))
-                    over = m.NewIntVar(0, len(cal.valid_periods(d)), f"over[{cid},{d}]")
-                    m.AddMaxEquality(over, [load - target, 0])
+                    over = m.new_int_var(0, len(cal.valid_periods(d)), f"over[{cid},{d}]")
+                    m.add_max_equality(over, [load - target, 0])
                     self.soft_terms.append((w.balance_daily_load, over))
             if w.light_slots:
                 for s in school.light_slots:
@@ -326,7 +326,7 @@ class ModelBuilder:
                 if w.avoid_edges and subject.avoid_edges and (p == valid[0] or p == valid[-1]):
                     self.soft_terms.append((w.avoid_edges, self.x[(ri, s)]))
 
-        self.model.Minimize(sum(wt * v for wt, v in self.soft_terms) if self.soft_terms else 0)
+        self.model.minimize(sum(wt * v for wt, v in self.soft_terms) if self.soft_terms else 0)
 
     def _gap_vars(self, busy: list[cp_model.IntVar], name: str) -> list[cp_model.IntVar]:
         """Exact 0/1 variables, one per idle period lying between two busy periods."""
@@ -338,19 +338,19 @@ class ModelBuilder:
         after: list[Any] = [None] * n
         before[1] = busy[0]
         for i in range(2, n):
-            v = m.NewBoolVar(f"{name}.before{i}")
-            m.AddMaxEquality(v, [busy[i - 1], before[i - 1]])
+            v = m.new_bool_var(f"{name}.before{i}")
+            m.add_max_equality(v, [busy[i - 1], before[i - 1]])
             before[i] = v
         after[n - 2] = busy[n - 1]
         for i in range(n - 3, -1, -1):
-            v = m.NewBoolVar(f"{name}.after{i}")
-            m.AddMaxEquality(v, [busy[i + 1], after[i + 1]])
+            v = m.new_bool_var(f"{name}.after{i}")
+            m.add_max_equality(v, [busy[i + 1], after[i + 1]])
             after[i] = v
         gaps = []
         for i in range(1, n - 1):
-            g = m.NewBoolVar(f"{name}.gap{i}")
-            m.AddBoolAnd([before[i], after[i], busy[i].Not()]).OnlyEnforceIf(g)
-            m.AddBoolOr([before[i].Not(), after[i].Not(), busy[i], g])
+            g = m.new_bool_var(f"{name}.gap{i}")
+            m.add_bool_and([before[i], after[i], busy[i].negated()]).only_enforce_if(g)
+            m.add_bool_or([before[i].negated(), after[i].negated(), busy[i], g])
             gaps.append(g)
         return gaps
 
@@ -371,25 +371,27 @@ class ModelBuilder:
             else:
                 wanted_b2.add((ri, s))
                 wanted_room.add((ri, s, e.room_id))
-        for key, v in self.b1.items():
-            self.model.AddHint(v, int(key in wanted_b1))
-        for key, v in self.b2.items():
-            self.model.AddHint(v, int(key in wanted_b2))
-        for key, v in self.e1.items():
-            self.model.AddHint(v, int(key in wanted_room and (key[0], key[1]) in wanted_b1))
-        for key, v in self.e2.items():
-            self.model.AddHint(v, int(key in wanted_room and (key[0], key[1]) in wanted_b2))
+        for k1, v in self.b1.items():
+            self.model.add_hint(v, int(k1 in wanted_b1))
+        for k2, v in self.b2.items():
+            self.model.add_hint(v, int(k2 in wanted_b2))
+        for k3, v in self.e1.items():
+            self.model.add_hint(v, int(k3 in wanted_room and (k3[0], k3[1]) in wanted_b1))
+        for k4, v in self.e2.items():
+            self.model.add_hint(v, int(k4 in wanted_room and (k4[0], k4[1]) in wanted_b2))
 
     def extract(self, solver: cp_model.CpSolver) -> Timetable:
         chosen: dict[tuple[int, Slot, int], str] = {}
-        for table, length in ((self.e1, 1), (self.e2, 2)):
-            for (ri, s, k), v in table.items():
-                if solver.BooleanValue(v):
-                    chosen[(ri, s, length)] = k
+        for (ri, s1, k1), v1 in self.e1.items():
+            if solver.boolean_value(v1):
+                chosen[(ri, s1, 1)] = k1
+        for (ri, s2, k2), v2 in self.e2.items():
+            if solver.boolean_value(v2):
+                chosen[(ri, s2, 2)] = k2
         events: list[Event] = []
         for table, length in ((self.b1, 1), (self.b2, 2)):
             for (ri, s), v in table.items():
-                if solver.BooleanValue(v):
+                if solver.boolean_value(v):
                     r: Requirement = self.reqs[ri]
                     room = chosen.get((ri, s, length), self.school.classes[r.class_id].home_room)
                     events.append(
@@ -415,14 +417,14 @@ def solve(school: School, settings: SolveSettings | None = None) -> SolveResult:
         builder.add_hint(settings.hint)
     solver = cp_model.CpSolver()
     configure(solver, settings)
-    status = solver.Solve(builder.model)
+    status = solver.solve(builder.model)
     wall = time.perf_counter() - started
     name = STATUS_NAMES.get(status, str(status))
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         return SolveResult(name, None, wall_time=wall)
     timetable = builder.extract(solver)
-    objective = solver.ObjectiveValue() if builder.soft_terms else 0.0
-    bound = solver.BestObjectiveBound() if builder.soft_terms else 0.0
+    objective = solver.objective_value if builder.soft_terms else 0.0
+    bound = solver.best_objective_bound if builder.soft_terms else 0.0
     result = SolveResult(
         name,
         timetable,
@@ -431,11 +433,11 @@ def solve(school: School, settings: SolveSettings | None = None) -> SolveResult:
         wall_time=wall,
         breakdown=score(school, timetable),
         stats={
-            "solver_wall_time": solver.WallTime(),
-            "branches": solver.NumBranches(),
-            "conflicts": solver.NumConflicts(),
-            "variables": len(builder.model.Proto().variables),
-            "constraints": len(builder.model.Proto().constraints),
+            "solver_wall_time": solver.wall_time,
+            "branches": solver.num_branches,
+            "conflicts": solver.num_conflicts,
+            "variables": len(builder.model.proto.variables),
+            "constraints": len(builder.model.proto.constraints),
             "workers": settings.workers,
             "seed": settings.seed,
             "time_limit": settings.time_limit,
