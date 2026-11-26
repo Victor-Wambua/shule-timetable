@@ -3,9 +3,9 @@
 Given a finished timetable and a change (a teacher leaves, a teacher becomes unavailable,
 a class gets an extra lesson), re-solve with two stages:
 
-1. minimise the number of lessons that move away from where they were;
-2. holding that minimum, minimise the usual soft-constraint penalty (plus a small cost for
-   switching rooms on lessons that stayed put).
+1. minimise the number of lessons that move away from where they were, and then the number
+   of room switches among the lessons that stayed;
+2. holding both minima, minimise the usual soft-constraint penalty.
 
 The answer to "the teacher left, how much changes?" is then a proven minimum, not a hope.
 """
@@ -25,8 +25,6 @@ from .issues import InputError, Issue
 from .model import Event, Requirement, School, Slot, SpecError, Timetable
 from .scoring import ScoreBreakdown, score
 from .solver import STATUS_NAMES, ModelBuilder, SolveSettings, configure, solve
-
-ROOM_CHANGE_COST = 5
 
 
 @dataclass(frozen=True)
@@ -270,8 +268,11 @@ def repair(
     model = builder.model
     soft_expr = sum(w * v for w, v in builder.soft_terms) if builder.soft_terms else 0
 
-    # stage 1: fewest moved lessons
-    model.minimize(moved_expr)
+    # stage 1: fewest moved lessons, then fewest room switches among the lessons that stayed
+    n_rooms = len(room_terms)
+    scale = n_rooms + 1
+    room_expr = sum(room_terms) if room_terms else 0
+    model.minimize(moved_expr * scale + room_expr)
     solver = cp_model.CpSolver()
     half = max(1.0, settings.time_limit / 2)
     configure(solver, replace(settings, time_limit=half))
@@ -283,12 +284,15 @@ def repair(
             None,
             wall_time=time.perf_counter() - started,
         )
-    best_moved = round(solver.objective_value)
+    best = round(solver.objective_value)
+    best_moved, best_rooms = divmod(best, scale)
     proven = status == cp_model.OPTIMAL
 
-    # stage 2: keep that minimum, then tidy up the soft score
+    # stage 2: hold both minima, then tidy up the soft score
     model.add(moved_expr <= best_moved)
-    model.minimize(soft_expr + ROOM_CHANGE_COST * sum(room_terms) if room_terms else soft_expr)
+    if room_terms:
+        model.add(room_expr <= best_rooms)
+    model.minimize(soft_expr)
     builder.add_hint(builder.extract(solver))
     solver2 = cp_model.CpSolver()
     configure(solver2, replace(settings, time_limit=max(1.0, settings.time_limit - half)))

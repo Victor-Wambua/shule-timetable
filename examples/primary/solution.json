@@ -1,0 +1,1479 @@
+{
+ "format": "shule-timetable/1",
+ "school": "Jitahidi Primary School (synthetic sample)",
+ "meta": {
+  "status": "FEASIBLE",
+  "objective": 96.0,
+  "best_bound": 38.0,
+  "gap": 0.6041666666666666,
+  "wall_time_s": 30.1,
+  "workers": 10,
+  "seed": 1,
+  "time_limit_s": 30.0,
+  "machine": "Apple M4, 10 cores, Darwin arm64",
+  "ortools": "9.15.6755",
+  "model_variables": 5627,
+  "model_constraints": 5281,
+  "solver_version": "shule-timetable 0.1.0"
+ },
+ "events": [
+  {
+   "class": "G1",
+   "subject": "SCI",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Mon",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "MAT",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Mon",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "MAT",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Mon",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "KIS",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Mon",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "MAT",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Mon",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "ENG",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Mon",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "KIS",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Mon",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "MAT",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Mon",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Mon",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "MAT",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Mon",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "SST",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Mon",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "KIS",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Mon",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Mon",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "SST",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Mon",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "SST",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Mon",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "ENG",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Mon",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "ENG",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Mon",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "MAT",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Mon",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "ENG",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Mon",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "ENG",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Mon",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "ENG",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Mon",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Mon",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R01",
+   "day": "Mon",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Mon",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "SST",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Mon",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "KIS",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Mon",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "SCI",
+   "teacher": "T05",
+   "room": "SCI1",
+   "day": "Mon",
+   "period": "P6",
+   "length": 2
+  },
+  {
+   "class": "G6",
+   "subject": "SST",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Mon",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Mon",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R02",
+   "day": "Mon",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "SCI",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Mon",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "CRE",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Mon",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "SCI",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Mon",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "ENG",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Tue",
+   "period": "P1",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "MAT",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Tue",
+   "period": "P1",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "SCI",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Tue",
+   "period": "P1",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R06",
+   "day": "Tue",
+   "period": "P1",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "SST",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Tue",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "MAT",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Tue",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "ENG",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Tue",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "ENG",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Tue",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R05",
+   "day": "Tue",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Tue",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "KIS",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Tue",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "SCI",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Tue",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "CRE",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Tue",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Tue",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "ENG",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Tue",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "SST",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Tue",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "MAT",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Tue",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "ART",
+   "teacher": "T08",
+   "room": "R02",
+   "day": "Tue",
+   "period": "P4",
+   "length": 2
+  },
+  {
+   "class": "G3",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Tue",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "MAT",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Tue",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "MAT",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Tue",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "ENG",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Tue",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "ENG",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Tue",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "KIS",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Tue",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "KIS",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Tue",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "SCI",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Tue",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "MAT",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Tue",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Tue",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "KIS",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Tue",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R03",
+   "day": "Tue",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "SST",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Tue",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "KIS",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Tue",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "SCI",
+   "teacher": "T06",
+   "room": "SCI1",
+   "day": "Tue",
+   "period": "P6",
+   "length": 2
+  },
+  {
+   "class": "G1",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R01",
+   "day": "Tue",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "CRE",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Tue",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Tue",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "MAT",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Wed",
+   "period": "P1",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "SCI",
+   "teacher": "T02",
+   "room": "SCI1",
+   "day": "Wed",
+   "period": "P1",
+   "length": 2
+  },
+  {
+   "class": "G4",
+   "subject": "ART",
+   "teacher": "T08",
+   "room": "R04",
+   "day": "Wed",
+   "period": "P1",
+   "length": 2
+  },
+  {
+   "class": "G6",
+   "subject": "MAT",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Wed",
+   "period": "P1",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "ENG",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Wed",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "ENG",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Wed",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "KIS",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Wed",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "SST",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Wed",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Wed",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "MAT",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Wed",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "SST",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Wed",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "KIS",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Wed",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "CRE",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Wed",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "ART",
+   "teacher": "T08",
+   "room": "R01",
+   "day": "Wed",
+   "period": "P4",
+   "length": 2
+  },
+  {
+   "class": "G2",
+   "subject": "ENG",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Wed",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "ENG",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Wed",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "MAT",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Wed",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "MAT",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Wed",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Wed",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "MAT",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Wed",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "KIS",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Wed",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "ENG",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Wed",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Wed",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "ENG",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Wed",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "CRE",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Wed",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "SST",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Wed",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "SCI",
+   "teacher": "T03",
+   "room": "SCI1",
+   "day": "Wed",
+   "period": "P6",
+   "length": 2
+  },
+  {
+   "class": "G4",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Wed",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "SST",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Wed",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R06",
+   "day": "Wed",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "KIS",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Wed",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "KIS",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Wed",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R04",
+   "day": "Wed",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "CRE",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Wed",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R03",
+   "day": "Thu",
+   "period": "P1",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "SCI",
+   "teacher": "T04",
+   "room": "SCI1",
+   "day": "Thu",
+   "period": "P1",
+   "length": 2
+  },
+  {
+   "class": "G2",
+   "subject": "MAT",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Thu",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "KIS",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Thu",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R05",
+   "day": "Thu",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "KIS",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Thu",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "SST",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Thu",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "MAT",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Thu",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "MAT",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Thu",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "MAT",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Thu",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "MAT",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Thu",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "ENG",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Thu",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "ENG",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Thu",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "ENG",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Thu",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R04",
+   "day": "Thu",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "SST",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Thu",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "ENG",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Thu",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "MAT",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Thu",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "AGR",
+   "teacher": "T08",
+   "room": "R02",
+   "day": "Thu",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "SST",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Thu",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "ENG",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Thu",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "ENG",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Thu",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "SST",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Thu",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "SCI",
+   "teacher": "T01",
+   "room": "SCI1",
+   "day": "Thu",
+   "period": "P6",
+   "length": 2
+  },
+  {
+   "class": "G2",
+   "subject": "KIS",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Thu",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "ART",
+   "teacher": "T08",
+   "room": "R03",
+   "day": "Thu",
+   "period": "P6",
+   "length": 2
+  },
+  {
+   "class": "G4",
+   "subject": "CRE",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Thu",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "CRE",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Thu",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "KIS",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Thu",
+   "period": "P6",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "CRE",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Thu",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "KIS",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Thu",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "KIS",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Thu",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "CRE",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Thu",
+   "period": "P7",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "ENG",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Fri",
+   "period": "P1",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "CRE",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Fri",
+   "period": "P1",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Fri",
+   "period": "P1",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "ENG",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Fri",
+   "period": "P1",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "ART",
+   "teacher": "T08",
+   "room": "R06",
+   "day": "Fri",
+   "period": "P1",
+   "length": 2
+  },
+  {
+   "class": "G1",
+   "subject": "CRE",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Fri",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "ENG",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Fri",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "ENG",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Fri",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "KIS",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Fri",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "MAT",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Fri",
+   "period": "P2",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Fri",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "MAT",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Fri",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "MAT",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Fri",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "MAT",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Fri",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "KIS",
+   "teacher": "T05",
+   "room": "R05",
+   "day": "Fri",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "MAT",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Fri",
+   "period": "P3",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "KIS",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Fri",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "SST",
+   "teacher": "T02",
+   "room": "R02",
+   "day": "Fri",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Fri",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G4",
+   "subject": "ENG",
+   "teacher": "T04",
+   "room": "R04",
+   "day": "Fri",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G5",
+   "subject": "ART",
+   "teacher": "T08",
+   "room": "R05",
+   "day": "Fri",
+   "period": "P4",
+   "length": 2
+  },
+  {
+   "class": "G6",
+   "subject": "ENG",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Fri",
+   "period": "P4",
+   "length": 1
+  },
+  {
+   "class": "G1",
+   "subject": "MAT",
+   "teacher": "T01",
+   "room": "R01",
+   "day": "Fri",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G2",
+   "subject": "PE",
+   "teacher": "T07",
+   "room": "FLD1",
+   "day": "Fri",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G3",
+   "subject": "SST",
+   "teacher": "T03",
+   "room": "R03",
+   "day": "Fri",
+   "period": "P5",
+   "length": 1
+  },
+  {
+   "class": "G6",
+   "subject": "KIS",
+   "teacher": "T06",
+   "room": "R06",
+   "day": "Fri",
+   "period": "P5",
+   "length": 1
+  }
+ ]
+}

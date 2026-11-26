@@ -1,0 +1,3 @@
+# T09 can no longer teach on Wednesdays (a second post at another school).
+changes:
+  - unavailable: {teacher: T09, slots: "Wed:*"}

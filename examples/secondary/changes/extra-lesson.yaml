@@ -1,0 +1,3 @@
+# Form 2N is given one extra Mathematics lesson a week.
+changes:
+  - add_lesson: {class: 2N, subject: MAT, count: 1}

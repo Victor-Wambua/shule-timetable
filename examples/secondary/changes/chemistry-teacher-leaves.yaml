@@ -1,0 +1,10 @@
+# T16 (Chemistry, 18 lessons a week) resigns mid-term. Their classes are shared between T17 and
+# T18; T17's weekly maximum is raised to take the extra load.
+changes:
+  - unavailable: {teacher: T16, slots: "*:*"}
+  - reassign: {from: T16, to: T17, class: 3E}
+  - reassign: {from: T16, to: T17, class: 3W}
+  - reassign: {from: T16, to: T17, class: 2N}
+  - reassign: {from: T16, to: T18, class: 4S}
+  - reassign: {from: T16, to: T18, class: 1S}
+  - set_max_per_week: {teacher: T17, value: 30}
