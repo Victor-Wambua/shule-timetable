@@ -39,6 +39,7 @@ packages = ["src/shule_timetable"]
 testpaths = ["tests"]
 addopts = "-q"
 markers = ["slow: tests that solve a larger instance"]
+filterwarnings = ["ignore:Bitwise inversion:DeprecationWarning"]
 
 [tool.ruff]
 line-length = 100

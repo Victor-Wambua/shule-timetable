@@ -506,7 +506,12 @@ def index_page(
             (f"{n_lessons:,}", "lesson periods a week"),
         )
     )
-    json_blob = json.dumps(finder_data(ctx), separators=(",", ":")).replace("</", "<\\/")
+    json_blob = (
+        json.dumps(finder_data(ctx), separators=(",", ":"))
+        .replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("&", "\\u0026")
+    )
     finder = f"""<section aria-labelledby="find-h">
 <h2 id="find-h">Where am I teaching?</h2>
 <form id="finder" class="finder card" onsubmit="return false">
