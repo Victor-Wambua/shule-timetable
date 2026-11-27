@@ -196,3 +196,76 @@ def test_solve_meta_shown_on_index(tmp_path: Path) -> None:
     assert (
         "FEASIBLE" in html and "25.0%" in html and "12.3 s" in html and "Test CPU, 4 cores" in html
     )
+
+
+# ---- accessibility and structure of the generated pages
+def test_home_h1_is_the_school_name_only(tmp_path: Path) -> None:
+    build_site(replace(tiny_school(), synthetic=True), valid_timetable(), tmp_path)
+    html = (tmp_path / "index.html").read_text(encoding="utf-8")
+    h1 = re.search(r"<h1>(.*?)</h1>", html, re.S)
+    assert h1 and "badge" not in h1.group(1) and "Synthetic" not in h1.group(1)
+    assert html.count("<h1") == 1
+    assert 'class="badge"' not in html
+    assert "Synthetic sample data." in html  # said once, as a plain line under the title
+
+
+def test_home_figures_and_proof_table(site: Path) -> None:
+    html = read(site, "index.html")
+    assert '<ul class="figures"' in html and 'class="card"' not in html
+    rows = re.findall(r'<tr><th scope="row"><span class="mark"', html)
+    assert len(rows) == 12
+    assert '<th scope="col" class="n">Checks run</th>' in html
+    assert "does not prove the" in html  # the honest footnote stays
+
+
+def test_nav_marks_the_current_page_and_section(site: Path) -> None:
+    home = read(site, "index.html")
+    assert '<a href="index.html" aria-current="page">Home</a>' in home
+    cls = read(site, "classes/C1.html")
+    assert 'aria-current="true">Classes</a>' in cls
+    assert cls.count("aria-current") == 1
+    assert 'href="#main">Skip to main content</a>' in cls and 'id="main" tabindex="-1"' in cls
+
+
+def test_entity_page_headings_do_not_skip_a_level(site: Path) -> None:
+    html = read(site, "classes/C1.html")
+    assert "<h3" not in html and html.count("<h1") == 1
+    assert 'class="dayh"' in html
+
+
+def test_master_grid_is_keyboard_friendly(site: Path) -> None:
+    html = read(site, "master.html")
+    assert 'href="#"' not in html  # cells are not dead links
+    assert html.count('type="radio" name="cell-view"') == 3
+    assert 'role="radiogroup"' in html and 'role="region" tabindex="0"' in html
+    assert '<th class="rowh" rowspan="2" scope="col">Class</th>' in html
+    assert "<caption" in html and 'scope="colgroup"' in html
+    assert "Scroll it sideways" in html and "Select a class name" in html
+
+
+def test_finder_has_a_no_script_message_and_a_clock_note(site: Path) -> None:
+    html = read(site, "index.html")
+    assert 'id="f-nojs"' in html and 'id="finder"' in html and "hidden>" in html
+    assert 'role="status" aria-live="polite"' in html
+    assert "Nairobi time" in html and '"tz":"Africa/Nairobi"' in html
+
+
+def test_landing_page_numbers_match_the_committed_examples() -> None:
+    """docs/pages/index.html is hand-written, so guard its figures against drift."""
+    from shule_timetable.loader import load_school
+    from shule_timetable.validator import validate
+
+    root = Path(__file__).resolve().parents[1]
+    landing = (root / "docs/pages/index.html").read_text(encoding="utf-8")
+    for name in ("secondary", "primary"):
+        school = load_school(root / "examples" / name)
+        tt = load_timetable(root / "examples" / name / "solution.json", school)
+        teachers = len([t for t in school.teachers if tt.by_teacher(t)])
+        for n, label in (
+            (len(school.classes), "classes"),
+            (teachers, "teachers"),
+            (len(school.rooms), "rooms"),
+            (f"{tt.lesson_count():,}", "lesson periods a week"),
+        ):
+            assert f"<li><b>{n}</b><span>{label}</span></li>" in landing, (name, label)
+        assert f"0 violations in {validate(school, tt).checks:,} checks" in landing

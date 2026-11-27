@@ -53,20 +53,21 @@ class Ctx:
 
 def layout(ctx: Ctx, title: str, body: str, root: str, active: str, desc: str = "") -> str:
     school = ctx.school
+    # "page" marks the page you are on; "true" marks the section a page belongs to.
     nav = [
-        ("index.html", "Home", "home"),
-        ("master.html", "Master grid", "master"),
-        ("master-teachers.html", "By teacher", "master-t"),
-        ("index.html#classes", "Classes", "classes"),
-        ("index.html#teachers", "Teachers", "teachers"),
-        ("index.html#rooms", "Rooms", "rooms"),
+        ("index.html", "Home", "home", "page"),
+        ("master.html", "Master grid", "master", "page"),
+        ("master-teachers.html", "By teacher", "master-t", "page"),
+        ("index.html#classes", "Classes", "classes", "true"),
+        ("index.html#teachers", "Teachers", "teachers", "true"),
+        ("index.html#rooms", "Rooms", "rooms", "true"),
     ]
     links = "".join(
-        f'<a href="{root}{href}"{" aria-current=page" if key == active else ""}>{esc(label)}</a>'
-        for href, label, key in nav
+        f'<a href="{root}{href}"{f' aria-current="{kind}"' if key == active else ""}>{esc(label)}</a>'
+        for href, label, key, kind in nav
     )
     tick = "&#10003;" if ctx.report.ok else "&#10007;"
-    verdict = f'<span class="tick">{tick}</span> Independent validator: ' + (
+    verdict = f'<span class="tick" aria-hidden="true">{tick}</span> Independent validator: ' + (
         f"no violations in {ctx.report.checks:,} checks."
         if ctx.report.ok
         else f"{len(ctx.report.violations)} violation(s) found."
@@ -84,15 +85,15 @@ def layout(ctx: Ctx, title: str, body: str, root: str, active: str, desc: str = 
 <link rel="stylesheet" href="{root}assets/style.css">
 </head>
 <body>
-<a class="skip" href="#main">Skip to the timetable</a>
+<a class="skip" href="#main">Skip to main content</a>
 <header class="top"><div class="top-inner">
 <a class="brand" href="{root}index.html">{LOGO}<span>Shule Timetable</span></a>
 <nav class="nav" aria-label="Sections">{links}</nav>
 </div></header>
-<main id="main">
+<main id="main" tabindex="-1">
 {body}
 </main>
-<footer>{verdict}{sample} <span class="no-print">Built by Shule Timetable.</span>
+<footer><p>{verdict}{sample}</p>
 <a class="no-print" href="{root}index.html#proof">Proof panel</a></footer>
 <script src="{root}assets/app.js" defer></script>
 </body>
@@ -135,16 +136,12 @@ def weekly_grid(ctx: Ctx, events: Sequence[Event], perspective: str, caption: st
     start_at = {(e.day, e.period): e for e in events}
     covered = {(e.day, e.period + 1) for e in events if e.length == 2}
     head = "".join(f'<th scope="col">{esc(d)}</th>' for d in cal.days)
-    rows = [
-        f'<tr><td class="sr-only">Period</td>{head}</tr>'.replace("<td", "<th").replace(
-            "</td>", "</th>"
-        )
-    ]
+    rows = [f'<tr><th scope="col"><span class="sr-only">Period</span></th>{head}</tr>']
     ncols = len(cal.days) + 1
     for p, per in enumerate(cal.periods):
         if p > 0 and cal.break_between(p - 1, p):
             rows.append(
-                f'<tr class="break"><th colspan="{ncols}">{_break_label(school, p)}</th></tr>'
+                f'<tr class="break"><td colspan="{ncols}">{_break_label(school, p)}</td></tr>'
             )
         cells = [
             f'<th scope="row" class="period">{esc(per.label)}<small>{esc(per.start)}</small></th>'
@@ -185,7 +182,7 @@ def day_list(ctx: Ctx, events: Sequence[Event], perspective: str) -> str:
             body = f"<ol>{items}</ol>"
         else:
             body = '<p class="none">No lessons.</p>'
-        parts.append(f"<section><h3>{esc(day)}</h3>{body}</section>")
+        parts.append(f'<section><h2 class="dayh">{esc(day)}</h2>{body}</section>')
     return f'<div class="daylist">{"".join(parts)}</div>'
 
 
@@ -194,7 +191,7 @@ def legend(ctx: Ctx, subject_ids: Sequence[str]) -> str:
         f'<li><span class="swatch {ctx.sclass(sid)}"></span>{esc(ctx.school.subjects[sid].name)}</li>'
         for sid in subject_ids
     )
-    return f'<ul class="legend" aria-label="Subject colours">{items}</ul>'
+    return f'<ul class="legend" aria-label="Subject colours and patterns">{items}</ul>'
 
 
 def _entity_page(
@@ -217,7 +214,7 @@ def _entity_page(
     )
     body = f"""<p class="crumbs"><a href="../index.html#{plural}">&larr; All {plural}</a></p>
 <h1>{esc(title)}</h1>
-<ul class="chips">{chip_html}</ul>
+<ul class="facts">{chip_html}</ul>
 <p class="no-print"><button type="button" onclick="window.print()">Print (A4 landscape)</button> {ics}</p>
 {weekly_grid(ctx, events, perspective, f"Weekly timetable for {title}")}
 {day_list(ctx, events, perspective)}
@@ -248,7 +245,7 @@ def teacher_page(ctx: Ctx, tid: str, ics_href: str | None) -> tuple[str, str]:
     subjects = ", ".join(sorted({s.subjects[e.subject_id].name for e in events}))
     chips = [
         f"<b>{lessons}</b> lessons a week (max {t.max_per_week})",
-        f"<b>{days}</b> teaching day(s)",
+        f"<b>{days}</b> teaching {'day' if days == 1 else 'days'}",
         f"{esc(subjects)}" if subjects else "No lessons",
     ]
     body = _entity_page(
@@ -294,9 +291,8 @@ def master_page(ctx: Ctx, by: str) -> tuple[str, str]:
         labels = ("Class", "Subject", "Room")
         title = "Master grid by teacher"
 
-    ncol = sum(cal.day_lengths)
-    del ncol
-    head1 = ['<th class="rowh" rowspan="2" scope="col">&nbsp;</th>']
+    noun = "class" if by == "class" else "teacher"
+    head1 = [f'<th class="rowh" rowspan="2" scope="col">{noun.capitalize()}</th>']
     head2 = []
     for d, day in enumerate(cal.days):
         n = cal.day_lengths[d]
@@ -325,7 +321,10 @@ def master_page(ctx: Ctx, by: str) -> tuple[str, str]:
                 ):
                     cls += " dayend"
                 if (d, p) in cal.blocked:
-                    cells.append(f'<td class="{cls} blocked" title="No lessons">&times;</td>')
+                    cells.append(
+                        f'<td class="{cls} blocked" title="No lessons">'
+                        '<span aria-hidden="true">&times;</span><span class="sr-only">No lessons</span></td>'
+                    )
                     continue
                 e = start_at.get((d, p))
                 if e is None:
@@ -335,28 +334,35 @@ def master_page(ctx: Ctx, by: str) -> tuple[str, str]:
                 cells.append(f'<td class="{cls}"{span}>{_master_cell(ctx, e, by)}</td>')
         body_rows.append("<tr>" + "".join(cells) + "</tr>")
     table = (
-        '<div class="scroll"><table class="master view-1">'
-        f'<caption class="sr-only">{esc(title)}</caption>'
+        f'<div class="master-scroll" role="region" tabindex="0" aria-label="{esc(title)}, scrolls sideways">'
+        '<table class="master view-1">'
+        f'<caption class="sr-only">{esc(title)}: one row per {noun}, one column per period. '
+        "Each cell shows the lesson for that period; empty cells are free periods.</caption>"
         f"<thead><tr>{''.join(head1)}</tr><tr>{''.join(head2)}</tr></thead>"
         f"<tbody>{''.join(body_rows)}</tbody></table></div>"
     )
     buttons = "".join(
-        f'<button type="button" data-view="{i + 1}" aria-pressed="{"true" if i == 0 else "false"}">'
-        f"{esc(lab)}</button>"
+        '<label class="seg-opt">'
+        f'<input type="radio" name="cell-view" value="{i + 1}"{" checked" if i == 0 else ""}>'
+        f"<span>{esc(lab)}</span></label>"
         for i, lab in enumerate(labels)
     )
     used = sorted({e.subject_id for e in ctx.tt.events}, key=lambda s: ctx.subject_idx[s])
     other = (
-        '<a href="master-teachers.html">By teacher</a>'
+        '<a class="tl" href="master-teachers.html">Show the grid by teacher</a>'
         if by == "class"
-        else '<a href="master.html">By class</a>'
+        else '<a class="tl" href="master.html">Show the grid by class</a>'
     )
     body = f"""<h1>{esc(title)}</h1>
-<p class="lede">Every lesson in the school on one sheet. Click a row name for the full page.</p>
+<p class="lede no-print">Every lesson in the school on one sheet. Select a {noun} name in the first column
+to open that {noun}'s full page.</p>
+<p class="hint">The sheet is wider than most screens. Scroll it sideways, or swipe on a phone: the
+{noun} names and the day and period headings stay in view.</p>
 <div class="master-tools no-print">
-<div class="seg" id="view-tools" role="group" aria-label="What each cell shows">{buttons}</div>
+<div class="seg-wrap" id="view-tools" role="radiogroup" aria-labelledby="seg-l" hidden>
+<span class="seg-l" id="seg-l">Each cell shows</span><div class="seg">{buttons}</div></div>
 <button type="button" onclick="window.print()">Print (A4 landscape)</button>
-<span>Switch to: {other}</span>
+{other}
 </div>
 {table}
 {legend(ctx, used)}"""
@@ -379,9 +385,10 @@ def _master_cell(ctx: Ctx, e: Event, by: str) -> str:
         f"{s.classes[e.class_id].name}, {s.teachers[e.teacher_id].name}, {s.rooms[e.room_id].name}"
     )
     return (
-        f'<a class="{ctx.sclass(sub)}" href="#" onclick="return false" aria-label="{esc(label)}" '
-        f'title="{esc(label)}"><span class="v1">{v1}</span><span class="v2">{v2}</span>'
-        f'<span class="v3">{v3}</span></a>'
+        f'<span class="mc {ctx.sclass(sub)}" title="{esc(label)}">'
+        f'<span class="sr-only">{esc(label)}</span>'
+        f'<span aria-hidden="true"><span class="v1">{v1}</span><span class="v2">{v2}</span>'
+        f'<span class="v3">{v3}</span></span></span>'
     )
 
 
@@ -394,9 +401,9 @@ def proof_panel(ctx: Ctx) -> str:
         mark = "&#10003;" if r.ok else "&#10007;"
         cls = "" if r.ok else ' class="bad"'
         rules.append(
-            f'<li{cls}><span class="mark" aria-hidden="true">{mark}</span>'
-            f'<span><span class="sr-only">{"Passed" if r.ok else "Failed"}: </span>{esc(r.title)}</span>'
-            f'<span class="n">{r.checked:,} checked</span></li>'
+            f'<tr{cls}><th scope="row"><span class="mark" aria-hidden="true">{mark}</span>'
+            f'<span class="sr-only">{"Passed" if r.ok else "Failed"}: </span>{esc(r.title)}</th>'
+            f'<td class="n">{r.checked:,}</td></tr>'
         )
     violations = ""
     if not ok:
@@ -413,7 +420,9 @@ def proof_panel(ctx: Ctx) -> str:
 <h2 id="proof-h">{headline}</h2>
 <p>Every hard rule was re-checked on the finished timetable by a separate validator that shares no code
 with the solver. It reads only the lessons and the school's input.</p>
-<ul class="rules">{"".join(rules)}</ul>
+<table class="rules"><caption class="sr-only">The {len(rules)} hard rules and how many checks each one ran</caption>
+<thead><tr><th scope="col">Hard rule</th><th scope="col" class="n">Checks run</th></tr></thead>
+<tbody>{"".join(rules)}</tbody></table>
 {violations}
 <p class="footnote">This proves the timetable obeys the rules written in the input. It does not prove the
 rules describe your school correctly; check the input files for that.</p>
@@ -431,8 +440,8 @@ def solve_panel(ctx: Ctx, breakdown: ScoreBreakdown, meta: dict[str, object]) ->
             else ""
         )
         rows.append(
-            f"<tr><td>{esc(item.label)}</td><td class=num>{item.count}</td>"
-            f"<td class=num>{item.weight}</td><td class=num>{item.penalty}</td><td>{w}</td></tr>"
+            f'<tr><th scope="row">{esc(item.label)}</th><td class="num">{item.count}</td>'
+            f'<td class="num">{item.weight}</td><td class="num">{item.penalty}</td><td>{w}</td></tr>'
         )
     facts = []
     status = meta.get("status")
@@ -450,10 +459,11 @@ def solve_panel(ctx: Ctx, breakdown: ScoreBreakdown, meta: dict[str, object]) ->
 {facts_html}
 <p>Hard rules can never be broken. Soft rules are preferences; each occurrence costs its weight and the
 solver minimises the total. Lower is better; 0 would mean every preference is met.</p>
-<div class="scroll"><table class="table">
-<thead><tr><th>Soft rule</th><th class="num">Times</th><th class="num">Weight</th><th class="num">Penalty</th><th></th></tr></thead>
+<div class="scroll" role="region" tabindex="0" aria-label="Soft-rule score table"><table class="table">
+<caption class="sr-only">Soft rules, how often each is broken, its weight and its penalty</caption>
+<thead><tr><th scope="col">Soft rule</th><th scope="col" class="num">Times</th><th scope="col" class="num">Weight</th><th scope="col" class="num">Penalty</th><th scope="col"><span class="sr-only">Share of the total</span></th></tr></thead>
 <tbody>{"".join(rows)}</tbody>
-<tfoot><tr><th>Total penalty</th><th></th><th></th><th class="num">{breakdown.total}</th><th></th></tr></tfoot>
+<tfoot><tr><th scope="row">Total penalty</th><th></th><th></th><th class="num">{breakdown.total}</th><th></th></tr></tfoot>
 </table></div>
 </section>"""
 
@@ -480,6 +490,7 @@ def finder_data(ctx: Ctx) -> dict[str, object]:
 
     teachers_with = {t: ctx.tt.by_teacher(t) for t in s.teachers if ctx.tt.by_teacher(t)}
     return {
+        "tz": "Africa/Nairobi",
         "days": list(cal.days),
         "periods": [{"label": p.label, "start": p.start, "end": p.end} for p in cal.periods],
         "dayLengths": list(cal.day_lengths),
@@ -496,9 +507,14 @@ def index_page(
 ) -> tuple[str, str]:
     s = ctx.school
     n_lessons = ctx.tt.lesson_count()
-    sample = '<span class="badge">Synthetic sample data</span>' if s.synthetic else ""
-    cards = "".join(
-        f'<div class="card"><div class="stat">{n}</div><div class="stat-label">{label}</div></div>'
+    sample = (
+        '<p class="dataline"><b>Synthetic sample data.</b> This school and everyone in it are '
+        "invented.</p>"
+        if s.synthetic
+        else ""
+    )
+    figures = "".join(
+        f"<li><b>{n}</b> {label}</li>"
         for n, label in (
             (len(s.classes), "classes"),
             (len([t for t in s.teachers if ctx.tt.by_teacher(t)]), "teachers"),
@@ -514,14 +530,17 @@ def index_page(
     )
     finder = f"""<section aria-labelledby="find-h">
 <h2 id="find-h">Where am I teaching?</h2>
-<form id="finder" class="finder card" onsubmit="return false">
+<p id="f-nojs" class="muted">This lookup needs JavaScript. The teacher and class pages listed
+further down work without it.</p>
+<form id="finder" class="fields" onsubmit="return false" aria-labelledby="find-h" hidden>
 <div><label for="f-kind">Look up a</label><select id="f-kind"><option value="teacher">Teacher</option><option value="class">Class</option></select></div>
-<div><label for="f-who">Who</label><select id="f-who"></select></div>
+<div><label for="f-who" id="f-who-l">Teacher</label><select id="f-who"></select></div>
 <div><label for="f-day">Day</label><select id="f-day"></select></div>
 <div><label for="f-period">Period</label><select id="f-period"></select></div>
 <div><button type="button" id="f-now">Right now</button></div>
 </form>
-<div class="answer" id="f-answer" role="status" aria-live="polite">Pick a teacher, day and period (needs JavaScript; the per-teacher pages below work without it).</div>
+<p class="hint" id="f-hint" hidden>Right now uses this device's clock, read as Nairobi time, and tells you the time it used.</p>
+<div class="answer" id="f-answer" role="status" aria-live="polite" aria-atomic="true"></div>
 <script type="application/json" id="finder-data">{json_blob}</script>
 </section>"""
 
@@ -531,7 +550,9 @@ def index_page(
             f'<a href="{folder}/{esc(eid)}.html">{esc(name)}<small>{esc(sub)}</small></a></li>'
             for eid, name, sub in items
         )
-        return f'<h2 id="{anchor}">{heading}</h2><ul class="dir">{lis}</ul>'
+        return (
+            f'<h2 id="{anchor}">{heading}</h2><ul class="dir" aria-labelledby="{anchor}">{lis}</ul>'
+        )
 
     classes = [
         (cid, k.name, f"{sum(e.length for e in ctx.tt.by_class(cid))} lessons")
@@ -563,8 +584,8 @@ def index_page(
             f"Fullest first.</p><ul>{items}</ul></section>"
         )
     exports = (
-        '<section aria-labelledby="exp-h"><h2 id="exp-h">Exports</h2><ul>'
-        '<li><a href="exports/timetable.csv" download>Whole timetable (CSV)</a>, one row per lesson</li>'
+        '<section aria-labelledby="exp-h"><h2 id="exp-h">Exports</h2><ul class="plain">'
+        '<li><a class="tl" href="exports/timetable.csv" download>Whole timetable (CSV)</a>, one row per lesson</li>'
         + (
             "<li>Calendar files (.ics) for every teacher and class are on their pages, "
             "and in <code>exports/ics/</code>. Import into Google or Apple Calendar.</li>"
@@ -573,18 +594,18 @@ def index_page(
         )
         + "</ul></section>"
     )
-    body = f"""<h1>{esc(s.name)} {sample}</h1>
-<p class="lede">Weekly timetable for every class, teacher and room. Print any page on A4 landscape,
+    body = f"""<h1>{esc(s.name)}</h1>
+{sample}<p class="lede">Weekly timetable for every class, teacher and room. Print any page on A4 landscape,
 or open it on a phone to check a lesson.</p>
-<div class="cards" role="list">{cards}</div>
-<div style="height:var(--space-5)"></div>
+<ul class="figures" aria-label="The school in numbers">{figures}</ul>
 {proof_panel(ctx)}
 {finder}
 {solve_panel(ctx, breakdown, meta)}
 {bind_html}
 <h2>Find a page</h2>
-<div class="finder"><div><label for="dir-filter">Filter classes, teachers and rooms</label>
+<div class="fields"><div><label for="dir-filter">Filter classes, teachers and rooms</label>
 <input type="search" id="dir-filter" placeholder="e.g. chemistry, T07, 3N" autocomplete="off"></div></div>
+<p class="hint" id="dir-status" role="status" aria-live="polite"></p>
 {listing(classes, "classes", "Classes", "classes")}
 {listing(teachers, "teachers", "Teachers", "teachers")}
 {listing(rooms, "rooms", "Specialist rooms", "rooms")}
