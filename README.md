@@ -124,12 +124,12 @@ classes: [case study](docs/CASE-STUDY.md).
 ## Testing
 
 ```bash
-uv run pytest            # 144 tests, about 17 s
+uv run pytest            # 151 tests, about 17 s
 uv run ruff check . && uv run ruff format --check .
 uv run mypy
 ```
 
-All 144 pass locally and in CI (ruff and mypy strict as well). They cover:
+All 151 pass locally and in CI (ruff and mypy strict as well). They cover:
 
 - **Validator:** 23 tests, a hand-built violating timetable for each of the 12 hard rules.
 - **Pre-checks and input parsing:** 29 tests, including exact explanation text and file:line pointers.
@@ -139,7 +139,18 @@ All 144 pass locally and in CI (ruff and mypy strict as well). They cover:
   at optimality its objective equals the independent score.
 - **Explain and repair:** the unsat core is the expected rule set and every member is needed;
   repair moves the proven minimum and beats starting again.
-- **Site, CSV, ICS, CLI end to end, sample generators.** No test touches the network.
+- **Site, CSV, ICS, CLI end to end, sample generators.** Includes checks on page structure (one `h1`,
+  heading order, current-page marking, labelled controls) and that the landing page's figures match
+  the committed examples. No test touches the network.
+
+## Design and accessibility notes
+
+- One accent, hairline rules, a system serif for headings and tabular figures for numbers; no web fonts or scripts from elsewhere.
+- Every subject has a pattern as well as a colour, so a grayscale print still reads. Printing a class, teacher or room page, or the by-class master grid, gives one A4 landscape sheet.
+- The master grid keeps its first column and header rows in view while scrolling both ways, is a labelled region you can scroll with the keyboard, and has a radio group for what each cell shows.
+- Text is 14 px or more outside the dense grid cells (13 px and 12 px bold there). The nav marks the current page with an underline as well as weight.
+- "Where am I teaching?" announces its answer, and "Right now" states the Nairobi time it used. Dark mode follows the system setting.
+- Checked in headless Chromium at 320 to 1440 px, 200% zoom, dark mode and print media; not tried with a screen reader.
 
 ## Project layout
 
